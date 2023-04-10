@@ -39,8 +39,14 @@ class MyApp extends StatelessWidget {
             return productsManager;
           },
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<AuthManager, CartManager>(
           create: (ctx) => CartManager(),
+          update: (ctx, authManager, CartManager) {
+            // Khi authManager có báo hiệu thay đổi thì đọc lại authToken
+            // cho productManager
+            CartManager!.authToken = authManager.authToken;
+            return CartManager;
+          },
         ),
         ChangeNotifierProvider(
           create: (ctx) => OrdersManager(),
@@ -109,6 +115,8 @@ class MyApp extends StatelessWidget {
                     },
                   );
                 }
+
+                
                 return null;
               },
           );

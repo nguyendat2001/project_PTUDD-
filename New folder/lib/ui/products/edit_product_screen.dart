@@ -15,6 +15,7 @@ class EditProductScreen extends StatefulWidget{
           id: null,
           title:'',
           price:0,
+          brand:'',
           description:'',
           imageUrl: '',
         );
@@ -33,7 +34,6 @@ class _EditProductScreenState extends State<EditProductScreen>{
   final _editForm = GlobalKey<FormState>();
   late Product _editedProduct;
   var _isLoading = false;
-
   bool _isValidImageUrl(String value) {
     return (value.startsWith('http') || value.startsWith('https')) && 
     (value.endsWith('.png') || value.endsWith('.jpg') || value.endsWith('.jpeg')); 
@@ -63,6 +63,7 @@ class _EditProductScreenState extends State<EditProductScreen>{
 
   @override
   Widget build(BuildContext context){
+    String dropdownValue = 'T-shirt';
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Product'),
@@ -83,8 +84,40 @@ class _EditProductScreenState extends State<EditProductScreen>{
             children: <Widget>[
               buildTitleField(),
               buildPriceField(),
+              SizedBox(height:10,),
+              DropdownButtonFormField(
+              decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder( //<-- SEE HERE
+                    borderSide: BorderSide(color: Colors.black, width: 2),
+                  ),
+                  focusedBorder: OutlineInputBorder( //<-- SEE HERE
+                    borderSide: BorderSide(color: Colors.black, width: 2),
+                  ),
+                  filled: true,
+                  fillColor: Color(0xFFFFFFFF),
+                ),
+                dropdownColor: Color(0xFFFFFFFF),
+                value: dropdownValue,
+                onChanged: (String? newValue) {
+                  setState(() {
+                    dropdownValue = newValue!;
+                    _editedProduct = _editedProduct.copyWith(brand: newValue!);
+                  });
+                },
+                items: <String>['T-shirt', 'Pant', 'Shoes'].map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(
+                      value,
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  );
+                }).toList(),
+              ),
+              SizedBox(height:10,),
               buildDescriptionField(),
               buildProductPreview(),
+              
             ],
           ),
         ),
@@ -95,7 +128,30 @@ class _EditProductScreenState extends State<EditProductScreen>{
   TextFormField buildTitleField(){
     return TextFormField(
       initialValue: _editedProduct.title,
-      decoration: const InputDecoration(labelText: 'Title'),
+      decoration: const InputDecoration(
+        enabledBorder: OutlineInputBorder( //<-- SEE HERE
+          borderSide: BorderSide(color: Colors.black, width: 2),
+        ),
+        focusedBorder: OutlineInputBorder( //<-- SEE HERE
+          borderSide: BorderSide(color: Colors.black, width: 2),
+        ),
+        filled: true,
+        fillColor: Color(0xFFFFFFFF),
+        prefixIcon: Align(
+          widthFactor: 1.0,
+          heightFactor: 1.0,
+          child: Icon(Icons.adobe_rounded,
+            color: Colors.green),
+        ),
+        labelText: 'Label text',
+        labelStyle: TextStyle(
+          color: Color(0xFF6200EE),
+        ),
+        helperText: 'Helper text',
+        suffixIcon: Icon(
+          Icons.check_circle,
+        ),
+      ),
       textInputAction: TextInputAction.next,
       autofocus: true,
       validator: (value){
@@ -110,34 +166,76 @@ class _EditProductScreenState extends State<EditProductScreen>{
     );
   }
 
-  TextFormField buildPriceField(){
+  Widget buildPriceField(){
     return TextFormField(
-      initialValue: _editedProduct.price.toString(),
-      decoration: const InputDecoration(labelText: 'Price'),
-      textInputAction: TextInputAction.next,
-      keyboardType: TextInputType.number,
-      validator: (value){
-        if(value!.isEmpty){
-          return 'Please enter a price.';
-        }
-        if(double.tryParse(value) == null){
-          return 'Please enter a valid number.';
-        }
-        if(double.parse(value) <= 0){
-          return 'Please enter a greater than zero.';
-        }
-        return null;
-      },
-      onSaved: (value){
-        _editedProduct = _editedProduct.copyWith(price: double.parse(value!));
-      },
-    );
+            initialValue: _editedProduct.price.toString(),
+            decoration: const InputDecoration(
+              labelText: 'Price',
+              prefixIcon: Align(
+                widthFactor: 1.0,
+                heightFactor: 1.0,
+                child: Icon(Icons.paid_rounded,
+              color: Colors.green),
+              ),
+              labelStyle: TextStyle(
+                color: Color(0xFF6200EE),
+              ),
+              helperText: 'Helper text',
+              suffixIcon: Icon(
+                Icons.check_circle,
+              ),
+              enabledBorder: OutlineInputBorder( //<-- SEE HERE
+                borderSide: BorderSide(color: Colors.black, width: 2),
+              ),
+              focusedBorder: OutlineInputBorder( //<-- SEE HERE
+                borderSide: BorderSide(color: Colors.black, width: 2),
+              ),
+            ),
+            textInputAction: TextInputAction.next,
+            keyboardType: TextInputType.number,
+            validator: (value){
+              if(value!.isEmpty){
+                return 'Please enter a price.';
+              }
+              if(double.tryParse(value) == null){
+                return 'Please enter a valid number.';
+              }
+              if(double.parse(value) <= 0){
+                return 'Please enter a greater than zero.';
+              }
+              return null;
+            },
+            onSaved: (value){
+              _editedProduct = _editedProduct.copyWith(price: double.parse(value!));
+            },
+          );
   }
 
   TextFormField buildDescriptionField(){
     return TextFormField(
       initialValue: _editedProduct.description,
-      decoration: const InputDecoration(labelText: 'Description'),
+      decoration: const InputDecoration(labelText: 'Description',
+            
+            prefixIcon: Align(
+              widthFactor: 1.0,
+              heightFactor: 1.0,
+              child: const Icon(Icons.feed_rounded,
+              color: Colors.green),
+            ),
+            labelStyle: TextStyle(
+            color: Color(0xFF6200EE),
+            ),
+            helperText: 'Helper text',
+            suffixIcon: Icon(
+              Icons.check_circle,
+            ),
+            enabledBorder: OutlineInputBorder( //<-- SEE HERE
+              borderSide: BorderSide(color: Colors.black, width: 2),
+            ),
+            focusedBorder: OutlineInputBorder( //<-- SEE HERE
+              borderSide: BorderSide(color: Colors.black, width: 2),
+            ),
+          ),
       maxLines:3,
       keyboardType: TextInputType.multiline,
       validator: (value){
@@ -190,7 +288,27 @@ class _EditProductScreenState extends State<EditProductScreen>{
 
   TextFormField buildImageURLField(){
     return TextFormField(
-      decoration: const InputDecoration(labelText: 'Image URL'),
+      decoration: const InputDecoration(labelText: 'Image URL',
+            prefixIcon: Align(
+              widthFactor: 1.0,
+              heightFactor: 1.0,
+              child: Icon(Icons.insert_photo_rounded,
+                color: Colors.green),
+            ),
+            labelStyle: TextStyle(
+            color: Color(0xFF6200EE),
+            ),
+            helperText: 'Helper text',
+            suffixIcon: Icon(
+              Icons.check_circle,
+            ),
+            enabledBorder: OutlineInputBorder( //<-- SEE HERE
+              borderSide: BorderSide(color: Colors.black, width: 2),
+            ),
+            focusedBorder: OutlineInputBorder( //<-- SEE HERE
+              borderSide: BorderSide(color: Colors.black, width: 2),
+            ),
+        ),
       textInputAction: TextInputAction.done,
       keyboardType: TextInputType.url,
       controller: _imageUrlController,

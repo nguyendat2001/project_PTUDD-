@@ -14,6 +14,8 @@ class OrdersManager with ChangeNotifier{
         CartItem(
           id:'c1',
           title:'Red Shirt',
+          productId :'Bc2VuQEkOlM26rsqzqoae3WpQMY2',
+          imageUrl:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Trousers-colourisolated.jpg/255px-Trousers-colourisolated.jpg',
           price: 29.99,
           quantity: 2,
         )

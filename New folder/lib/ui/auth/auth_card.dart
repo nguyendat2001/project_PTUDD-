@@ -48,6 +48,7 @@ class _AuthCardState extends State<AuthCard> {
               _authData['email']!,
               _authData['password']!,
             );
+        
       }
     } catch (error) {
       showErrorDialog(

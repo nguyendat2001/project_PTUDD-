@@ -26,7 +26,7 @@ class ProductsService extends FirebaseService{
         Uri.parse('$databaseUrl/userFavorites/$userId.json?auth=$token');
       final userFavoritesResponse = await http.get(userFavoritesUrl);
       final userFavoritesMap = json.decode(userFavoritesResponse.body);
-
+      
       productsMap.forEach((productId, product){
         final isFavorite = (userFavoritesMap == null)
           ? false

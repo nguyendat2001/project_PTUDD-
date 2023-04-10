@@ -20,11 +20,18 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = ValueNotifier<bool>(false);
   late Future<void> _fetchProducts;
+  late Future<void> _fetchCarts;
 
   @override
   void initState(){
     super.initState();
     _fetchProducts = context.read<ProductsManager>().fetchProducts();
+    // _fetchCarts = context.read<CartManager>().fetchCarts();
+  }
+
+  Future<void> _refreshProducts(BuildContext context) async {
+    await context.read<ProductsManager>().fetchProducts(true);
+    // await context.read<CartManager>().fetchCarts(true);
   }
 
   @override
@@ -39,13 +46,13 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       ),
       drawer: const AppDrawer(),
       body: FutureBuilder(
-        future: _fetchProducts,
+        future: _refreshProducts(context),
         builder: (context, snapshot){
           if(snapshot.connectionState == ConnectionState.done) {
             return ValueListenableBuilder<bool>(
               valueListenable: _showOnlyFavorites,
               builder: (context, onlyFavorites, child){
-                return ProductsGrid(onlyFavorites);
+                return ProductsList(onlyFavorites);
               }
             );
           }

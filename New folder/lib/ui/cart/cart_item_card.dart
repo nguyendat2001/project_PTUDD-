@@ -44,30 +44,32 @@ class CartItemCard extends StatelessWidget {
       },
       child: buildItemCard(),
     );
+  
   }
-
   Widget buildItemCard(){
-    return Card(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 4,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(8),
-        child: ListTile(
-          leading: CircleAvatar(
-            child: Padding(
-              padding: const EdgeInsets.all(5),
-              child: FittedBox(
-                child: Text('\$${cardItem.price}'),
-              ),
+    return Container(
+      child: Card(
+        
+        margin: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 4,
+        ),
+        child: Padding(
+          
+          padding: const EdgeInsets.all(8),
+          child: ListTile(
+            leading:  ClipRRect(
+              borderRadius: BorderRadius.all(Radius.circular(10.0)),//add border radius here
+              child: Image.network(cardItem.imageUrl , width: 50, height: 50),//add image location here
             ),
+            title: Text(cardItem.title),
+            subtitle: Text('Price: \$${(cardItem.price)} x ${cardItem.quantity} '),
+            trailing: Text('${cardItem.quantity * (cardItem.price)}'),
           ),
-          title: Text(cardItem.title),
-          subtitle: Text('Total: \$${(cardItem.price * cardItem.quantity)}'),
-          trailing: Text('${cardItem.quantity} x'),
         ),
       ),
     );
+    
+    
   }
 }

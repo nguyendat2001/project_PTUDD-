@@ -11,5 +11,6 @@ export 'auth/auth_screen.dart';
 export 'auth/auth_manager.dart';
 export 'splash_screen.dart';
 export 'products/product_favorite_screen.dart';
+export 'products/search_product.dart';
 
 export './layouts/bot_nav.dart';

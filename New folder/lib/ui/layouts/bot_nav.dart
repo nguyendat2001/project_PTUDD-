@@ -4,6 +4,7 @@ import '../auth/auth_manager.dart';
 import '../orders/orders_screen.dart';
 import '../products/user_products_screen.dart';
 import '../products/products_overview_screen.dart';
+import '../products/search_product.dart';
 
 
 
@@ -54,23 +55,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
           );
           switch (index) {
             case 0:
+              _selectedIndex = index;
               Navigator.of(context).pushReplacementNamed('/');
-               _selectedIndex = index;
               break;
             case 1:
+              _selectedIndex = index;
               Navigator.of(context)
               .pushReplacementNamed('/favorite');
-               _selectedIndex = index;
+               
               break;
             case 2:
+              _selectedIndex = index;
               Navigator.of(context)
-              .pushReplacementNamed('/user-products');
-               _selectedIndex = index;
+              .pushReplacementNamed('/cart');
               break;
             case 3:
+               _selectedIndex = index;
                Navigator.of(context)
               .pushReplacementNamed('/orders');
-               _selectedIndex = index;
               break;
           }
         },

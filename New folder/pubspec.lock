@@ -49,6 +49,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.5"
+  easy_search_bar:
+    dependency: "direct main"
+    description:
+      name: easy_search_bar
+      sha256: "08a549a53dddf1f03fa7dd58b4a2facf81b021b9ec3b914476ed6e177d1e0bc3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.4.2"
   fake_async:
     dependency: transitive
     description:
@@ -94,6 +102,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  flutter_rating_bar:
+    dependency: "direct main"
+    description:
+      name: flutter_rating_bar
+      sha256: d2af03469eac832c591a1eba47c91ecc871fe5708e69967073c043b2d775ed93
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
@@ -240,6 +256,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "6.0.5"
+  searchfield:
+    dependency: "direct main"
+    description:
+      name: searchfield
+      sha256: deb363c95b9e64ea9ffd1a3b69926b0fe0344daedab872fc42014755a8199de9
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.7.5"
   shared_preferences:
     dependency: "direct main"
     description:

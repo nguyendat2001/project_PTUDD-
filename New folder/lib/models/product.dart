@@ -3,6 +3,7 @@ class Product {
   final String ?id;
   final String title;
   final String description;
+  final String brand;
   final double price;
   final String imageUrl;
   final ValueNotifier<bool> _isFavorite;
@@ -11,6 +12,7 @@ class Product {
     this.id,
     required this.title,
     required this.description,
+    required this.brand,
     required this.price,
     required this.imageUrl,
     isFavorite = false,
@@ -32,6 +34,7 @@ class Product {
     String? id,
     String? title,
     String? description,
+    String? brand,
     double? price,
     String? imageUrl,
     bool? isFavorite,
@@ -40,6 +43,7 @@ class Product {
       id: id ?? this.id, 
       title: title ?? this.title, 
       description: description ?? this.description, 
+      brand: brand ?? this.brand, 
       price: price ?? this.price,
       imageUrl: imageUrl ?? this.imageUrl,
       isFavorite: isFavorite ?? this.isFavorite,
@@ -50,6 +54,7 @@ class Product {
     return{
       'title': title,
       'description': description,
+      'brand': brand,
       'price': price,
       'imageUrl': imageUrl,
     };
@@ -60,6 +65,7 @@ class Product {
       id: json['id'], 
       title: json['title'], 
       description: json['description'], 
+      brand: json['brand'], 
       price: json['price'],
       imageUrl: json['imageUrl'],
     );
