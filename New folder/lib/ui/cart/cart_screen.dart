@@ -5,24 +5,21 @@ import 'cart_item_card.dart';
 import '../orders/orders_manager.dart';
 import '../screens.dart';
 
-class CartScreen extends StatefulWidget {
+// class CartScreen extends StatefulWidget {
+//   static const routeName = '/cart';
+//   const CartScreen({super.key});
+//   @override
+//   State<CartScreen> createState() => _CartScreen();
+// }
+
+class CartScreen extends StatelessWidget {
   static const routeName = '/cart';
   const CartScreen({super.key});
-  @override
-  State<CartScreen> createState() => _CartScreen();
-}
-
-class _CartScreen extends State<CartScreen> {
-  late Future<void> _fetchCarts;
+  // late Future<void> _fetchCarts;
 
   Future<void> _refreshProducts(BuildContext context) async {
     // await context.read<ProductsManager>().fetchProducts(true);
     await context.read<CartManager>().fetchCarts(true);
-  }
-  @override
-  void initState(){
-    super.initState();
-    _fetchCarts = context.read<CartManager>().fetchCarts();
   }
 
   @override

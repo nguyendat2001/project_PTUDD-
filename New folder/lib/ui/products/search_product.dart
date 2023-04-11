@@ -39,9 +39,6 @@ class _searchFieldState extends State<searchField> {
       searchResultTiles = products
           .where(
               (p) => p.title.toLowerCase().contains(searchString.toLowerCase()))
-          // .map(
-          //   (p) => ProductTile(product: p),
-          // )
           .toList();
     }
     return Scaffold(
@@ -50,11 +47,7 @@ class _searchFieldState extends State<searchField> {
           onSearch: setSearchString,
           // suggestions: _suggestions
         ),
-      // appBar: AppBar(
-      //    title: SearchBar(
-      //     onChanged: setSearchString,
-      //   ),
-      // ),
+
       body: searchString.isNotEmpty
           ? ListView.builder(
               shrinkWrap: true,

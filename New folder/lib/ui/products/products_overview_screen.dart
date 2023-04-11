@@ -20,18 +20,15 @@ class ProductsOverviewScreen extends StatefulWidget {
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   var _showOnlyFavorites = ValueNotifier<bool>(false);
   late Future<void> _fetchProducts;
-  late Future<void> _fetchCarts;
 
   @override
   void initState(){
     super.initState();
     _fetchProducts = context.read<ProductsManager>().fetchProducts();
-    // _fetchCarts = context.read<CartManager>().fetchCarts();
   }
 
   Future<void> _refreshProducts(BuildContext context) async {
     await context.read<ProductsManager>().fetchProducts(true);
-    // await context.read<CartManager>().fetchCarts(true);
   }
 
   @override
@@ -42,7 +39,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         backgroundColor: Color(0xFFFFFFFF),
         automaticallyImplyLeading: true,
         leadingWidth: 40,
-        title: const Text('MyShop',style: TextStyle(color: Colors.black),),
+        title: const Text('E-commerce',style: TextStyle(color: Colors.black),),
       ),
       drawer: const AppDrawer(),
       body: FutureBuilder(
@@ -65,51 +62,4 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
     );
   }
 
-  Widget buildShoppingCartIcon(){
-    return Consumer<CartManager>(
-      builder: (ctx, cartManager, child) {
-        return TopRightBadge(
-          data: CartManager().productCount,
-            child: IconButton(  
-            icon: const Icon(
-              Icons.shopping_cart,
-              color: Colors.black
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.routeName);
-            },
-          ),
-        );
-      },
-    );
-  }
-
-  Widget buildProductFilterMenu() {
-    return PopupMenuButton(
-      onSelected: (FilterOptions selectedValue) {
-          if (selectedValue == FilterOptions.favorites) {
-            _showOnlyFavorites.value = true;
-          } else {
-            _showOnlyFavorites.value = false;
-          }
-      },
-
-      icon: const Icon(
-        Icons.more_vert,
-        color: Colors.black
-      ),
-
-      itemBuilder: (ctx) => [
-        const PopupMenuItem(
-          value: FilterOptions.favorites,
-          child: Text('Only Favorites',style: TextStyle(color: Colors.black)),
-        ),
-        
-        const PopupMenuItem(
-          value: FilterOptions.all,
-          child: Text('show All',style: TextStyle(color: Colors.black)),
-        ),
-      ],
-    );
-  }
 }

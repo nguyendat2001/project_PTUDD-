@@ -131,32 +131,6 @@ class ProductDetailScreen extends StatelessWidget {
                           letterSpacing: 0.5,
                         ),
                       ),
-                      const SizedBox(height: 20.0),
-
-                      Text(
-                        'Treatment',
-                        style: TextStyle(
-                          color: Colors.black.withOpacity(0.9),
-                          fontSize: 18.0,
-                          height: 1.4,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Icon(Icons.widgets,
-                            color: Colors.black),
-                          Icon(Icons.widgets,
-                            color: Colors.black),
-                          Icon(Icons.widgets,
-                            color: Colors.black),
-                          Icon(Icons.widgets,
-                            color: Colors.black),
-                        ],
-                      ),
                     ],
                   ),
                 ),

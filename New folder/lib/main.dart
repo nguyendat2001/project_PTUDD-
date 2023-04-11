@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
       child: Consumer<AuthManager>(
         builder: (ctx, authManager, child){
           return MaterialApp(
-            title: 'MyShop',
+            title: 'E-commercial',
             debugShowCheckedModeBanner: false,
             theme: ThemeData(
               appBarTheme: AppBarTheme(

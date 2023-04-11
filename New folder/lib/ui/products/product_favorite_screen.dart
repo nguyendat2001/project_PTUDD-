@@ -68,51 +68,5 @@ class _ProductsFavoriteScreenState extends State<ProductsFavoriteScreen> {
     );
   }
 
-  Widget buildShoppingCartIcon(){
-    return Consumer<CartManager>(
-      builder: (ctx, cartManager, child) {
-        return TopRightBadge(
-          data: CartManager().productCount,
-            child: IconButton(  
-            icon: const Icon(
-              Icons.shopping_cart,
-              color: Colors.black
-            ),
-            onPressed: () {
-              Navigator.of(context).pushNamed(CartScreen.routeName);
-            },
-          ),
-        );
-      },
-    );
-  }
 
-  Widget buildProductFilterMenu() {
-    return PopupMenuButton(
-      onSelected: (FilterOptions selectedValue) {
-          if (selectedValue == FilterOptions.favorites) {
-            _showOnlyFavorites.value = true;
-          } else {
-            _showOnlyFavorites.value = false;
-          }
-      },
-
-      icon: const Icon(
-        Icons.more_vert,
-        color: Colors.black
-      ),
-
-      itemBuilder: (ctx) => [
-        const PopupMenuItem(
-          value: FilterOptions.favorites,
-          child: Text('Only Favorites',style: TextStyle(color: Colors.black)),
-        ),
-        
-        const PopupMenuItem(
-          value: FilterOptions.all,
-          child: Text('show All',style: TextStyle(color: Colors.black)),
-        ),
-      ],
-    );
-  }
 }

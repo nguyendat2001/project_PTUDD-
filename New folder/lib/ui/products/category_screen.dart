@@ -68,11 +68,11 @@ class _categoryDetailState extends State<categoryDetail> {
               itemCount: products.length,
               itemBuilder: (ctx, i) => ProductGridTile(products[i]),
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-            ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 10,
+                      mainAxisSpacing: 10,
+                      mainAxisExtent: 230, // here set custom Height You Want
+                    ),
           )
     );
   }

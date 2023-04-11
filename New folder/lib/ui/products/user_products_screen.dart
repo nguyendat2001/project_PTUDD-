@@ -21,9 +21,6 @@ class UserProductsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('your Products'),
-        actions: <Widget>[
-          buildAddButton(context),
-        ],
       ),
       drawer: const AppDrawer(),
       body: FutureBuilder(
@@ -40,21 +37,21 @@ class UserProductsScreen extends StatelessWidget {
           );
         },
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: (){
+          Navigator.of(context).pushNamed(
+            EditProductScreen.routeName,
+          );
+        },
+        label: const Text('Add New'),
+        icon: const Icon(Icons.add_box_outlined),
+        backgroundColor: Colors.pink,
+      ),
       bottomNavigationBar: const BottomNavBar(),
 
     );
   }
 
-  Widget buildAddButton(BuildContext context) {
-    return IconButton(
-      icon: const Icon(Icons.add),
-      onPressed: (){
-        Navigator.of(context).pushNamed(
-          EditProductScreen.routeName,
-        );
-      },
-    );
-  }
 
   Widget buildUserProductListView(ProductsManager productsManager){
     return Consumer<ProductsManager>(

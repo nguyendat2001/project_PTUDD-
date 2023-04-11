@@ -100,6 +100,10 @@ class ProductsList extends StatelessWidget {
 
           Column(
             children: <Widget>[
+                    Text(
+                      'Shop by Category',
+                      style: Theme.of(context).textTheme.headlineSmall,
+                    ),
                 GridView.count(
                   shrinkWrap: true,
                   padding: EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -108,11 +112,7 @@ class ProductsList extends StatelessWidget {
                     mainAxisSpacing: 10,
                     crossAxisCount: 2,
                   children: [
-                    // Text(
-                    //   'Shop by Category',
-                    //   style: Theme.of(context).textTheme.headlineSmall,
-                    // ),
-                    // const SizedBox(height: 16),
+
                     CategoryTile(
                       title: categories[0].name,
                       imageUrl: categories[0].imagePath,
