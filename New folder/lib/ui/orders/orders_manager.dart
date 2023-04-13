@@ -1,28 +1,45 @@
+import '../../models/auth_token.dart';
+import '../../services/orders_service.dart';
+
 import '../../models/cart_item.dart';
 import '../../models/order_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
+import '../../services/orders_service.dart';
 
 
 class OrdersManager with ChangeNotifier{
-  final List<OrderItem> _orders=[
-    OrderItem(
-      id:'o1',
-      amount:59.98,
-      products:[
-        CartItem(
-          id:'c1',
-          title:'Red Shirt',
-          productId :'Bc2VuQEkOlM26rsqzqoae3WpQMY2',
-          imageUrl:'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Trousers-colourisolated.jpg/255px-Trousers-colourisolated.jpg',
-          price: 29.99,
-          quantity: 2,
-        )
-      ],
-      dateTime: DateTime.now(),
-    )
-  ];
+  List<OrderItem> _parseOrderItems(dynamic orders) {
+  final List<OrderItem> loadedOrders = [];
+  if (orders == null) {
+    return loadedOrders;
+  }
+  orders.forEach((orderId, orderData) {
+    final List<dynamic> productsJson = orderData['products'];
+    final List<CartItem> loadedProducts = productsJson.map((productJson) => CartItem.fromJson(productJson)).toList();
+    final now = DateTime.now().toIso8601String();
+    final OrderItem loadedOrder = OrderItem(
+      id: orderId,
+      amount: orderData['amount'].toDouble(),
+      dateTime: now,
+      products: loadedProducts,
+    );
+    loadedOrders.add(loadedOrder);
+  });
+  return loadedOrders;
+}
+
+  List<OrderItem> _orders = [];
+  
+  final OrdersService _ordersService;
+  
+  OrdersManager([AuthToken? authToken])
+    : _ordersService = OrdersService(authToken);
+
+  set authToken(AuthToken? authToken){
+    _ordersService.authToken = authToken;
+  }
 
   int get orderCount{
     return _orders.length;
@@ -32,16 +49,49 @@ class OrdersManager with ChangeNotifier{
     return [..._orders];
   }
 
-  void addOrder( List<CartItem> cartProducts, double total) async{
-    _orders.insert(
-      0,
-      OrderItem(
-        id: 'o${DateTime.now().toIso8601String()}',
-        amount: total,
-        products: cartProducts,
-        dateTime: DateTime.now(),
-      ),
-    );
+  Future<void> fetchOrders([bool filterByUser = true]) async {
+    _orders = await _ordersService.fetchOrders(filterByUser);
     notifyListeners();
   }
+
+  Future<void> addOrder(List<CartItem> products, double total) async {
+    final now = DateTime.now().toIso8601String();
+    final newOrder = await _ordersService.addOrder(OrderItem(
+      id: 'o${DateTime.now().toIso8601String()}',
+      amount: total,
+      products: products,
+      dateTime: now,
+    ));
+    if(newOrder != null){
+      _orders.add(newOrder);
+      notifyListeners();
+    }
+  }
+
+  // void addOrder( List<CartItem> cartProducts, double total) async{
+  //   final now = DateTime.now().toIso8601String();
+  //   _ordersService.addOrder(
+  //     OrderItem(
+  //       id: 'o${DateTime.now().toIso8601String()}',
+  //       amount: total,
+  //       products: cartProducts,
+  //       dateTime: now,
+  //     ),
+  //   );
+  //   notifyListeners();
+  // }
+
+  // void addOrder( List<CartItem> cartProducts, double total) async{
+  //   final now = DateTime.now().toIso8601String();
+  //   _orders.insert(
+  //     0,
+  //     OrderItem(
+  //       id: 'o${DateTime.now().toIso8601String()}',
+  //       amount: total,
+  //       products: cartProducts,
+  //       dateTime: now,
+  //     ),
+  //   );
+  //   notifyListeners();
+  // }
 }

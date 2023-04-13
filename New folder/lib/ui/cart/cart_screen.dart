@@ -41,15 +41,17 @@ class CartScreen extends StatelessWidget {
         },
       ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: context.read<CartManager>().itemCount <= 0
-                    ? null
-                    : (){
-                      context.read<OrdersManager>().addOrder(
-                        context.read<CartManager>().products,
-                        context.read<CartManager>().totalAmount,
-                      );
-                      context.read<CartManager>().clear();
-                    },
+        onPressed: (){
+            if( context.read<CartManager>().itemCount > 0 ){
+              context.read<OrdersManager>().addOrder(
+                context.read<CartManager>().products,
+                context.read<CartManager>().totalAmount,
+              );
+              print(context.read<CartManager>().itemCount);
+              context.read<CartManager>().clear();
+            }
+        }, 
+            
         label: const Text('Order'),
         icon: const Icon(Icons.add_card_rounded),
         backgroundColor: Colors.pink,

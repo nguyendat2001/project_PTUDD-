@@ -9,6 +9,7 @@ import './ui/products/products_manager.dart';
 // import 'ui/orders/orders_manager.dart';
 // import './ui/products/edit_product_screen.dart';
 import './ui/screens.dart';
+import './ui/admin/admin_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
@@ -48,8 +49,14 @@ class MyApp extends StatelessWidget {
             return CartManager;
           },
         ),
-        ChangeNotifierProvider(
+        ChangeNotifierProxyProvider<AuthManager, OrdersManager>(
           create: (ctx) => OrdersManager(),
+          update: (ctx, authManager, OrdersManager) {
+            // Khi authManager có báo hiệu thay đổi thì đọc lại authToken
+            // cho OrdersManager
+            OrdersManager!.authToken = authManager.authToken;
+            return OrdersManager;
+          },
         ),
       ],
       child: Consumer<AuthManager>(
@@ -82,6 +89,8 @@ class MyApp extends StatelessWidget {
                 },
               ),
             routes: {
+              AdminScreen.routeName:
+                (ctx) => AdminScreen(),
               CartScreen.routeName:
                 (ctx) => const CartScreen(),
               OrdersScreen.routeName:

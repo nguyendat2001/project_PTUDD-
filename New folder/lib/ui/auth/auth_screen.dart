@@ -1,54 +1,140 @@
 import 'package:flutter/material.dart';
+import '../../ui/admin/admin_screen.dart';
+import '../../ui/auth/auth_register.dart';
+import 'auth_register.dart';
+import 'auth_manager.dart';
+import '../../ui/products/products_overview_screen.dart';
 
-import 'auth_card.dart';
-import 'app_banner.dart';
 
-class AuthScreen extends StatelessWidget {
+class AuthScreen extends StatefulWidget {
+
   static const routeName = '/auth';
 
   const AuthScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final deviceSize = MediaQuery.of(context).size;
-    return Scaffold(
-      // resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                  const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                ],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                stops: const [0, 1],
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            child: SizedBox(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const Flexible(
-                    child: AppBanner(),
+  State<AuthScreen> createState() => _AuthScreenState();
+}
+
+class _AuthScreenState extends State<AuthScreen> {
+  final _formKey = GlobalKey<FormState>();
+  late String txtemail, txtpassword;
+
+    void _login() async {
+    try{
+      await AuthManager().login(txtemail, txtpassword);
+         
+    } catch(error) {
+      print(error);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context){
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.blue,
+        body: Container(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
                   ),
-                  Flexible(
-                    flex: deviceSize.width > 600 ? 2 : 1,
-                    child: const AuthCard(),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.email,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: 'Email'
+                          ),
+                          onSaved: (value){
+                            txtemail = value!;
+                          },
+                          validator: validateEmail,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.lock,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: 'Password'
+                          ),
+                          onSaved: (value){
+                            txtpassword = value!;
+                          },
+                          validator: validatePassword,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  if(_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                  }
+                                  _login();
+                                },
+                                child: Text('Login'),
+                                
+                              ),
+                            )
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => NewRegister()));
+                          },
+                          child: Text('Create a new account'),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        )
       ),
     );
+  }
+
+
+
+
+
+  String? validateEmail(String? email) {
+    if(email!.isEmpty) {
+      return 'Enter email address';
+    } else {
+      return null;
+    }
+  }
+
+  String? validatePassword(String? password) {
+    if(password!.isEmpty) {
+      return 'Enter password';
+    } else {
+      return null;
+    }
   }
 }
