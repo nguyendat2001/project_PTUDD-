@@ -10,6 +10,7 @@ import '../../services/orders_service.dart';
 
 
 class OrdersManager with ChangeNotifier{
+  
   List<OrderItem> _parseOrderItems(dynamic orders) {
   final List<OrderItem> loadedOrders = [];
   if (orders == null) {

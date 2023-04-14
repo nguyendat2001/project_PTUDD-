@@ -32,8 +32,10 @@ import 'cart_item.dart';
     }
 
     Map<String, dynamic> toJson(){
+      List<Map<String,dynamic>> productsJson = 
+        products.map((product) => product.toJson()).toList();
       return{
-
+        'id': id,
         'amount': amount,
         'products': products,
         'dateTime': dateTime,
@@ -41,11 +43,15 @@ import 'cart_item.dart';
     }
 
     static OrderItem fromJson(Map<String, dynamic> json){
+       List<dynamic> productsJson = json['products'];
+
+       List<CartItem> products = 
+          productsJson.map((productsJson) => CartItem.fromJson(productsJson)).toList();
       return OrderItem(
         id: json['id'], 
         // productId: json['productId'], 
         amount: json['amount'], 
-        products: json['products'], 
+        products: products, 
         dateTime: json['dateTime'],
       );
     }
