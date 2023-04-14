@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import 'package:provider/provider.dart';
 import '../../ui/admin/admin_screen.dart';
 import '../../ui/auth/auth_register.dart';
 import 'auth_register.dart';
 import 'auth_manager.dart';
 import '../../ui/products/products_overview_screen.dart';
+import '../../models/http_exception.dart';
+import '../shared/dialog_utils.dart';
 
+  enum AuthMode { signup, login }
 
 class AuthScreen extends StatefulWidget {
 
@@ -17,16 +22,37 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey();
   late String txtemail, txtpassword;
+  
+  AuthMode _authMode = AuthMode.login;
 
-    void _login() async {
-    try{
-      await AuthManager().login(txtemail, txtpassword);
-         
-    } catch(error) {
-      print(error);
+  final _isSubmitting = ValueNotifier<bool>(false);
+  Future<void> _login() async {
+    if (!_formKey.currentState!.validate()) {
+      return;
     }
+    _formKey.currentState!.save();
+
+    _isSubmitting.value = true;
+
+    try {
+      if (_authMode == AuthMode.login) {
+        await context.read<AuthManager>().login(
+              txtemail!,
+              txtpassword!,
+            );
+        
+      } 
+    } catch (error) {
+      showErrorDialog(
+          context,
+          (error is HttpException)
+              ? error.toString()
+              : 'Authentication failed');
+    }
+
+    _isSubmitting.value = false;
   }
 
   @override
@@ -82,6 +108,7 @@ class _AuthScreenState extends State<AuthScreen> {
                             txtpassword = value!;
                           },
                           validator: validatePassword,
+                          obscureText: true,
                         ),
                         Row(
                           children: [

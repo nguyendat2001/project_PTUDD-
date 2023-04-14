@@ -21,7 +21,7 @@ class AdminScreen extends StatelessWidget {
     MenuOption(
       title: 'Orders',
       icon: Icons.delivery_dining,
-      routeName: '/admin/order',
+      routeName: '/orders_admin',
     ),
   ];
 

@@ -5,6 +5,7 @@ import 'products_manager.dart';
 import '../shared/app_drawer.dart';
 import './edit_product_screen.dart';
 import '../screens.dart';
+import '../../ui/admin/app_drawer.dart';
 
 
 class UserProductsScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class UserProductsScreen extends StatelessWidget {
   const UserProductsScreen({super.key});
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await context.read<ProductsManager>().fetchProducts(true);
+    await context.read<ProductsManager>().fetchProducts(false);
   }
 
   @override
@@ -22,7 +23,7 @@ class UserProductsScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('your Products'),
       ),
-      drawer: const AppDrawer(),
+      drawer: const AdminDrawer(),
       body: FutureBuilder(
         future: _refreshProducts(context),
         builder: (ctx, snapshot){
@@ -47,7 +48,7 @@ class UserProductsScreen extends StatelessWidget {
         icon: const Icon(Icons.add_box_outlined),
         backgroundColor: Colors.pink,
       ),
-      bottomNavigationBar: const BottomNavBar(),
+      // bottomNavigationBar: const BottomNavBar(),
 
     );
   }

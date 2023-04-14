@@ -57,15 +57,15 @@ class AppDrawer extends StatelessWidget{
             },
           ),
           const Divider(),
-          ListTile(
-            leading: const Icon(Icons.edit,
-            color: Colors.green),
-            title: const Text('Manage Products'),
-            onTap: (){
-              Navigator.of(context)
-              .pushReplacementNamed(UserProductsScreen.routeName);
-            },
-          ),
+          // ListTile(
+          //   leading: const Icon(Icons.edit,
+          //   color: Colors.green),
+          //   title: const Text('Manage Products'),
+          //   onTap: (){
+          //     Navigator.of(context)
+          //     .pushReplacementNamed(UserProductsScreen.routeName);
+          //   },
+          // ),
         ],
       ),
     );

@@ -12,7 +12,7 @@ import '../../ui/products/products_overview_screen.dart';
 import '../../models/user.dart';
 
 
-class AuthManager with ChangeNotifier {
+class UserManager extends ChangeNotifier {
 
   AuthToken? _authToken;
   Timer? _authTimer;
@@ -24,18 +24,15 @@ class AuthManager with ChangeNotifier {
     return authToken != null && authToken!.isValid;
   }
 
-    bool get isAdmin {
-    return authToken != null && authToken!.userId == 'F7FP5f7EyUdzzVQei5OAgPX1Hyy2';
-  }
-
   AuthToken? get authToken {
     return _authToken;
   }
 
     List<User> _items = [];
+    
     Future<void> fetchUsers([bool filterByUser = false]) async {
     _items = await _usersService.fetchUsers(filterByUser);
-    print(_items);
+    // print(_items);
     notifyListeners();
   }
 

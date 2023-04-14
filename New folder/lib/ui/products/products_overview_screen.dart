@@ -28,7 +28,7 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   }
 
   Future<void> _refreshProducts(BuildContext context) async {
-    await context.read<ProductsManager>().fetchProducts(true);
+    await context.read<ProductsManager>().fetchProducts(false);
   }
 
   @override

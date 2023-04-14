@@ -47,7 +47,18 @@ class AdminDrawer extends StatelessWidget{
             color: Colors.green),
             title: const Text('User'),
             onTap: (){
-              // Navigator.of(context).pushReplacementNamed('/admin/user');
+              Navigator.of(context).pushReplacementNamed('/admin/user');
+            },
+          ),
+          
+          const Divider(),
+          ListTile(
+            leading: const Icon(Icons.payment,
+            color: Colors.green),
+            title: const Text('Orders'),
+            onTap: (){
+              Navigator.of(context)
+              .pushReplacementNamed('/orders_admin');
             },
           ),
           const Divider(),
@@ -58,16 +69,6 @@ class AdminDrawer extends StatelessWidget{
             onTap: (){
               Navigator.of(context)
               .pushReplacementNamed(UserProductsScreen.routeName);
-            },
-          ),
-          const Divider(),
-          ListTile(
-            leading: const Icon(Icons.payment,
-            color: Colors.green),
-            title: const Text('Orders'),
-            onTap: (){
-              Navigator.of(context)
-              .pushReplacementNamed('product/order');
             },
           ),
           

@@ -10,6 +10,7 @@ import './ui/products/products_manager.dart';
 // import './ui/products/edit_product_screen.dart';
 import './ui/screens.dart';
 import './ui/admin/admin_screen.dart';
+export './ui/admin/admin_user_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/material.dart';
@@ -30,6 +31,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (ctx) => AuthManager(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AuthManager(),
         ),
         ChangeNotifierProxyProvider<AuthManager, ProductsManager>(
           create: (ctx) => ProductsManager(),
@@ -78,19 +82,25 @@ class MyApp extends StatelessWidget {
                 secondary: Colors.deepOrange,
               ),
             ),
-            home: authManager.isAuth
-              ? const ProductsOverviewScreen()
-              : FutureBuilder(
+            home: authManager.isAdmin
+              ?  AdminScreen()
+              : ( authManager.isAuth
+               ? const ProductsOverviewScreen()
+               : FutureBuilder(
                 future: authManager.tryAutoLogin(),
                 builder: (ctx, snapshot){
                   return snapshot.connectionState == ConnectionState.waiting
                     ? const SplashScreen()
                     : const AuthScreen();
                 },
-              ),
+              )),
             routes: {
               AdminScreen.routeName:
                 (ctx) => AdminScreen(),
+              UsersScreen.routeName:
+                (ctx) => UsersScreen(),
+              OrdersAdminScreen.routeName:
+                (ctx) => OrdersAdminScreen(),
               CartScreen.routeName:
                 (ctx) => const CartScreen(),
               OrdersScreen.routeName:

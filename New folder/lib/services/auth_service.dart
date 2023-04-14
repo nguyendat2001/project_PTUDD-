@@ -4,11 +4,11 @@ import 'dart:async';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-
+import './firebase_service.dart';
 import '../models/http_exception.dart';
 import '../models/auth_token.dart';
 
-class AuthService {
+class AuthService extends FirebaseService {
   static const _authTokenKey = 'authToken';
   late final String? _apiKey;
 
@@ -49,7 +49,42 @@ class AuthService {
     }
   }
 
-  Future<AuthToken> signup(String email, String password) {
+  Future<bool> check_admin(String email, String role) async {
+    final response = await http.get(
+    Uri.parse('$databaseUrl/users.json'),
+  );
+    if (response.statusCode == 200) {
+    final responseData = jsonDecode(response.body);
+    bool isUserExists = false;
+    // Kiểm tra thông tin đăng nhập của người dùng với dữ liệu đã có trên database
+    responseData.forEach((key, value) {
+      if (value['email'] == email && value['role'] == 'admin') {
+        isUserExists = true;
+      } else return false;
+    });
+    if (isUserExists) {
+      print('Đăng nhập thành công với admin');
+      return true;
+      // Chuyển hướng đến trang chủ
+    } else {
+      print('Email hoặc mật khẩu không đúng');
+      return false;
+    }
+  } else {
+    throw Exception('Lỗi xảy ra khi đăng nhập');
+  }
+  }
+
+  Future<AuthToken> signup(String name, String email, String password, String role) {
+    http.post(
+      Uri.parse('$databaseUrl/users.json'),
+      body: json.encode({
+        'name': name,
+        'email': email,
+        'role': role,
+        'returnSecureToken': true,
+      }),
+    );
     return _authenticate(email, password, 'signUp');
   }
 
@@ -63,8 +98,7 @@ class AuthService {
   }
 
   AuthToken _fromJson(Map<String, dynamic> json) {
-    return AuthToken(
-      token: json['idToken'],
+    return AuthToken(token: json['idToken'],
       userId: json['localId'],
       expiryDate: DateTime.now().add(
         Duration(
@@ -95,4 +129,6 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     prefs.remove(_authTokenKey);
   }
+
+
 }

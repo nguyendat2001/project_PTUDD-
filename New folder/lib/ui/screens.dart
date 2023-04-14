@@ -3,6 +3,7 @@ export 'products/product_detail_screen.dart';
 export 'products/user_products_screen.dart';
 export 'products/products_manager.dart';
 export 'orders/orders_screen.dart';
+export 'orders/orders_screen_admin.dart';
 export 'orders/orders_manager.dart';
 export 'cart/cart_screen.dart';
 export 'cart/cart_manager.dart';
@@ -12,5 +13,6 @@ export 'auth/auth_manager.dart';
 export 'splash_screen.dart';
 export 'products/product_favorite_screen.dart';
 export 'products/search_product.dart';
+export 'admin/admin_user_screen.dart';
 
 export './layouts/bot_nav.dart';

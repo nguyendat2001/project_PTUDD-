@@ -1,145 +1,248 @@
 import 'package:flutter/material.dart';
+import '../../services/auth_service.dart';
+import 'auth_screen.dart';
+import 'package:provider/provider.dart';
 
 import 'auth_manager.dart';
 import '../../ui/products/products_overview_screen.dart';
+import '../../models/http_exception.dart';
+import '../shared/dialog_utils.dart';
+
+
+  enum AuthMode { signup, login }
 
 class NewRegister extends StatefulWidget{
-  _NewRegister createState() => _NewRegister();
+  static const routeName = '/register';
+
+  const NewRegister({super.key});
+
+  @override
+  State<NewRegister> createState() => _NewRegister();
   
 }
 
 class _NewRegister extends State<NewRegister>{
 
+final GlobalKey<FormState> _formKey = GlobalKey();
+late String txtname, txtemail, txtpassword, txtrole='user';
+ AuthMode _authMode = AuthMode.signup;
 
-  void _saveItem() async {
-      AuthManager().signUp(txtemail, txtpassword);
 
-  }
+  final _isSubmitting = ValueNotifier<bool>(false);
+  Future<void> _saveItem() async {
 
-  final role = 'user';
-  void _saveItem2() async {
-    if (txtname == null || txtemail == null || txtpassword == null) {
-    print('Invalid input');
-    return;
-  }
-    try{
-      await AuthManager().signUp2(txtname!, txtemail!, txtpassword!, role);
-              
-    } catch(error) {
-      print(error);
+    if (!_formKey.currentState!.validate()) {
+      return ;
     }
-  }
+    _formKey.currentState!.save();
 
-  final _formKey = GlobalKey<FormState>();
-  late String txtname, txtemail, txtpassword, txtrole='';
+    _isSubmitting.value = true;
 
-  final _name = TextEditingController();
-  final _email= TextEditingController();
-  final _password = TextEditingController();
+    try {
+      if (_authMode == AuthMode.signup) {
+        // Log user in
+        await context.read<AuthManager>().signup(
+              txtname!,
+              txtemail!,
+              txtpassword!,
+              txtrole!,
+            );
+      } 
+    } catch (error) {
+      showErrorDialog(
+          context,
+          (error is HttpException)
+              ? error.toString()
+              : 'Authentication failed');
+    }
 
-  void _resetItem(){
-    _name.clear();
-    _email.clear();
-    _password.clear();
+    _isSubmitting.value = false;
   }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
+  Widget build(BuildContext context){
+    return SafeArea(
+      child: Scaffold(
         backgroundColor: Colors.blue,
-        title: Text('Create a new account'),
-      ),
-      body: SingleChildScrollView(
-        child: Container(
-        padding: EdgeInsets.all(10.0),
-        child: Form(
-          key: _formKey,
+        body: Container(
           child: Column(
-          children: [
-            TextFormField(
-              controller: _name,
-              decoration: InputDecoration(
-                labelText: 'Name'
-              ),
-              onSaved: (value){
-                txtname = value!;
-              },
-              validator: validateName,
-            ),
-            TextFormField(
-              controller: _email,
-              decoration: InputDecoration(
-                labelText: 'Email'
-              ),
-              onSaved: (value){
-                txtemail = value!;
-              },
-              validator: validateEmail,
-            ),
-            TextFormField(
-              controller: _password,
-              decoration: InputDecoration(
-                labelText: 'Password'
-              ),
-              onSaved: (value){
-                txtpassword = value!;
-              },
-              validator: validatePassword,
-            ),
-            // DropdownButtonFormField(
-            //   decoration: InputDecoration(
-            //     labelText: 'Role',
-            //   ),
-            //   value: txtrole.isNotEmpty ? txtrole : null,
-            //   items: <String>['User', 'Admin']
-            //     .map<DropdownMenuItem<String>>((String value){
-            //     return DropdownMenuItem<String>(
-            //       value: value,
-            //       child: Text(value),
-            //     );
-            //     }).toList(),
-            //     onChanged: (value) {
-            //       setState(() {
-            //         txtrole = value.toString();
-            //       });
-            //     },
-            // ),
-            Row(
-              children: [
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){
-                      _resetItem();
-                    },
-                    child: Text('Reset'),
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Center(
+                child: SingleChildScrollView(
+                  child: Container(
+                  padding: EdgeInsets.all(10.0),
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  height: MediaQuery.of(context).size.height * 0.5,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                  ),
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.people,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: 'Name'
+                          ),
+                          onSaved: (value){
+                            txtname = value!;
+                          },
+                          validator: validateName,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.email,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: 'Email'
+                          ),
+                          onSaved: (value){
+                            txtemail = value!;
+                          },
+                          validator: validateEmail,
+                        ),
+                        TextFormField(
+                          decoration: InputDecoration(
+                            prefixIcon: Padding(
+                              padding: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.lock,
+                                color: Colors.black,
+                              ),
+                            ),
+                            labelText: 'Password'
+                          ),
+                          onSaved: (value){
+                            txtpassword = value!;
+                          },
+                          validator: validatePassword,
+                          obscureText: true,
+                        ),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: ElevatedButton(
+                                onPressed: (){
+                                  if(_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                  }
+                                    _saveItem();
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(builder: (context) => const ProductsOverviewScreen()),
+                                      );
+                                },
+                                child: Text('Sign Up'),
                                 
+                              ),
+                            )
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: (){
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => AuthScreen()));
+                          },
+                          child: Text('Login'),
+                        ),
+                      ],
+                    ),
+                  ),
                   ),
                 ),
-                Expanded(
-                  child: ElevatedButton(
-                    onPressed: (){
-                      if(_formKey.currentState!.validate()) {
-                        _formKey.currentState!.save();
-                        // _saveItem();
-                        _saveItem2();
-                        _saveItem();
-                        
-                      }
-                    },
-                    child: Text('Sign up'),
-                                
-                  ),
-                )
-              ],
-            ),
-          ],
-        ),
-        ),
-      ),
+              ),
+            ],
+          ),
+        )
       ),
     );
   }
+  // Widget build(BuildContext context) {
+  //   return Scaffold(
+  //     appBar: AppBar(
+  //       backgroundColor: Colors.blue,
+  //       title: Text('Create a new account'),
+  //     ),
+  //     body: SingleChildScrollView(
+  //       child: Container(
+  //       padding: EdgeInsets.all(10.0),
+  //       child: Form(
+  //         key: _formKey,
+  //         child: Column(
+  //         children: [
+  //           TextFormField(
+  //             decoration: InputDecoration(
+  //               labelText: 'Name'
+  //             ),
+  //             onSaved: (value){
+  //               txtname = value!;
+  //             },
+  //             validator: validateName,
+  //           ),
+  //           TextFormField(
+  
+  //             decoration: InputDecoration(
+  //               labelText: 'Email'
+  //             ),
+  //             onSaved: (value){
+  //               txtemail = value!;
+  //             },
+  //             validator: validateEmail,
+  //           ),
+  //           TextFormField(
+
+  //             decoration: InputDecoration(
+  //               labelText: 'Password'
+  //             ),
+  //             onSaved: (value){
+  //               txtpassword = value!;
+  //             },
+  //             validator: validatePassword,
+  //           ),
+  //           Row(
+  //             children: [
+  //               Expanded(
+  //                 child: ElevatedButton(
+  //                   onPressed: (){
+
+  //                   },
+  //                   child: Text('Reset'),
+                                
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: ElevatedButton(
+  //                   onPressed: (){
+  //                     if(_formKey.currentState!.validate()) {
+  //                       _formKey.currentState!.save();
+  //                       _saveItem();
+                        
+  //                     }
+  //                   },
+  //                   child: Text('Sign up'),
+                                
+  //                 ),
+  //               )
+  //             ],
+  //           ),
+  //         ],
+  //       ),
+  //       ),
+  //     ),
+  //     ),
+  //   );
+  // }
 
   String? validateName(String? name) {
     if(name!.isEmpty) {
