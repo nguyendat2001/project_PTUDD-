@@ -3,7 +3,7 @@ import '../../models/order_item.dart';
 import 'package:provider/provider.dart';
 import 'orders_manager.dart';
 import 'order_item_card.dart';
-import '../shared/app_drawer.dart';
+import '../admin/app_drawer.dart';
 import '../screens.dart';
 
 class OrdersAdminScreen extends StatelessWidget {
@@ -24,7 +24,7 @@ class OrdersAdminScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Manager Orders'),
       ),
-      drawer: const AppDrawer(),
+      drawer: const AdminDrawer(),
       body: FutureBuilder(
         future: _refreshOrder(context),
         builder: (ctx, snapshot) {

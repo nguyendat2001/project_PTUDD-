@@ -62,9 +62,16 @@ late String txtname, txtemail, txtpassword, txtrole='user';
   @override
   Widget build(BuildContext context){
     return SafeArea(
+      
       child: Scaffold(
         backgroundColor: Colors.blue,
         body: Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage("https://images.pexels.com/photos/1031988/pexels-photo-1031988.jpeg?auto=compress&cs=tinysrgb&w=600"), 
+              fit: BoxFit.cover,
+            ),
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
